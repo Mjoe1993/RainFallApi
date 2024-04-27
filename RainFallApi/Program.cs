@@ -1,4 +1,30 @@
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var info = new OpenApiInfo()
+{
+    Title = "Your API Documentation",
+    Version = "v1",
+    Description = "Description of your API",
+    Contact = new OpenApiContact()
+    {
+        Name = "Your name",
+        Email = "your@email.com",
+    }
+
+};
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", info);
+
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 // Add services to the container.
 

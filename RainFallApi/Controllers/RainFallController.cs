@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RainFallApi.Models;
-using RainFallApi.Services;
+using RainFallLibrary.Models;
+using RainFallLibrary.Queries;
+using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RainFallApi.Controllers
@@ -10,43 +12,38 @@ namespace RainFallApi.Controllers
     [ApiController]
     public class RainFallController : ControllerBase
     {
+        private readonly IMediator _mediator;
+        public RainFallController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
         /// <summary>
-        /// 
+        /// You can get Rain Fall By Id
         /// </summary>
         /// <remarks>
-        /// test test
+        /// Information on from a particular station
+        /// valid id = 3680
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id:int}", Name = "GetRainfallById")]
         public async Task<ActionResult> GetRainfallById(int id)
         {
-            ApiHelper.InitializeCient();
-            string url = "https://environment.data.gov.uk/flood-monitoring/id/stations/3680";
-  
-    
-            using (HttpResponseMessage response = await ApiHelper.HttpClient.GetAsync(url))
+            try
             {
-                try
+                var result = await _mediator.Send(new GetRainFallByIdQuery(id));
+                if (result != null)
                 {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Root root = new Root();
-                        root = await response.Content.ReadAsAsync<Root>();
-                        return Ok(root);
-
-                    }
-                    else
-                    {
-                        throw new Exception(response.ReasonPhrase);
-                    }
+                    return Ok(result);
                 }
-                catch (Exception ex)
+                else
                 {
-                    return BadRequest(ex);
+                    return NotFound();
                 }
-    
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

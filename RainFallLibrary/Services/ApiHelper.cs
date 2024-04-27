@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 
-namespace RainFallApi.Services
+namespace RainFallLibrary.Services
 {
     public static class ApiHelper
     {
@@ -10,6 +10,7 @@ namespace RainFallApi.Services
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Accept.Clear();
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
 
         }
     }

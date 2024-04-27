@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RainFallApi.Models
+namespace RainFallLibrary.Models
 {
     public class Items
     {

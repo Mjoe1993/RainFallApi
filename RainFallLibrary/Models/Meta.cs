@@ -1,4 +1,4 @@
-﻿namespace RainFallApi.Models
+﻿namespace RainFallLibrary.Models
 {
     public class Meta
     {
